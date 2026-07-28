@@ -1,0 +1,51 @@
+name: my-app-MM
+schemaVersion: v0
+author: MM Aut
+displayName: My App
+iconUrl: https://example.com/icon.png
+category: Lifestyle
+description: |
+  A one-line description of your service, shown on the catalog card.
+
+backend:
+  landscape:
+    gitUrl: https://github.com/aminich-m/codesphere
+
+configSchema:
+  type: object
+  properties: {}
+
+secretsSchema:
+  type: object
+  properties:
+    DATABASE_USER:
+      type: string
+      format: password
+    DATABASE_PASSWORD:
+      type: string
+      format: password
+    DATABASE_PORT:
+      type: integer
+
+detailsSchema:
+  type: object
+  properties:
+    hostname:
+      type: string
+      format: uri
+    service_url_frontend_3000: 
+      type: string
+      format: uri
+
+plans:
+  - id: 0
+    name: Default Plan
+    description: Resource usage depends on the CI profile of the landscape. There are no custom plans for landscape-based providers.
+    parameters: {}
+
+versions:
+  0.0.1:
+    ciProfile: ci.dev.yml
+    # gitRef can be a commit hash, branch, or tag
+    gitRef: main
+    description: Initial version
