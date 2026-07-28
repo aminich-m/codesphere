@@ -1,0 +1,1 @@
+cs sync landscape -w 58362 then cs start pipeline -w 58362 -p mealie prepare run

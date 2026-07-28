@@ -1,0 +1,52 @@
+schemaVersion: v0.4
+prepare:
+  steps:
+    - name: Install Dependencies
+      command: npm install
+    - name: Build Application
+      command: npm run build
+test:
+  steps: []
+run:
+  container:
+    healthEndpoint: http://localhost:9000/
+    plan: 101
+    replicas: 1
+    network:
+      ports:
+        - port: 3000
+          isPublic: false
+        - port: 9000
+          isPublic: false
+      paths:
+        - port: 9000
+          path: /
+    env:
+      DATABASE_USER: ${{ vault['db-user'] }}
+      DATABASE_PASSWORD: ${{ vault['db-pw'] }}
+      DATABASE_SERVER: ms-postgres-v1-80-landscape-58362-db01.ms-postgres
+      DATABASE_PORT: 5432
+    runAsUser: 1501
+    runAsGroup: 1010
+    volumeMounts:
+      - name: _workspace
+        mountPath: /home/user/app
+        workspacePath: ""
+      - name: _workspace
+        mountPath: /app/data
+        workspacePath: data
+    image: ghcr.io/mealie-recipes/mealie:v3.14.0
+  db01:
+    provider:
+      name: postgres
+      schemaVersion: v1
+    plan:
+      id: 0
+      parameters:
+        cpu: 5
+        memory: 512
+    config:
+      version: "17.9"
+    secrets:
+      userPassword: ${{ workspace.env['db-user'] }}
+      superuserPassword: ${{ workspace.env['bd-pw'] }}
